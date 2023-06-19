@@ -1,0 +1,20 @@
+spring:
+  datasource:
+    username: postgres
+    password: P@55w0rd
+    url: 'jdbc:postgresql://localhost:5432/news_db'
+  jpa:
+    hibernate:
+      ddl-auto: create
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+  profiles:
+    active: dev
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
