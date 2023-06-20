@@ -1,11 +1,14 @@
 package ru.clevertec.news.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.news.entity.Comment;
+import ru.clevertec.news.exception.EntityNotFoundException;
 import ru.clevertec.news.repository.CommentRepository;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,24 +17,47 @@ import java.util.UUID;
 public class CommentService {
     private CommentRepository commentRepository;
 
-    public Comment create(String text, String username) {
-        return null;
+    private NewsService newsService;
+
+    @Transactional
+    public Comment create(String text, String username, UUID newsId) {
+        var news = newsService.getById(newsId);
+
+        var comment = new Comment();
+        comment.setText(text);
+        comment.setTime(LocalDateTime.now());
+        comment.setNews(news);
+        comment.setUsername(username);
+
+        return commentRepository.save(comment);
     }
 
-    public Comment update(String text, String username, UUID newsId) {
-        return null;
+    @Transactional
+    public Comment update(String text, UUID commentId) {
+        var comment = commentRepository.findById(commentId).orElseThrow(()
+                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", commentId.toString())));
+
+        comment.setText(text);
+        return commentRepository.save(comment);
     }
 
-    public boolean delete(UUID newsId, UUID commentId) {
-        //TODO throw an exep if not success
-        return false;
+    @Transactional
+    public boolean delete(UUID commentId) {
+        var comment = commentRepository.findById(commentId).orElseThrow(()
+                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", commentId.toString())));
+        commentRepository.delete(comment);
+
+        return true;
     }
 
-    public List<Comment> getAll() {
-        return new ArrayList<>();
+    @Transactional(readOnly = true)
+    public List<Comment> getAll(Pageable pageable) {
+        return commentRepository.findAllWithPagination(pageable);
     }
 
+    @Transactional(readOnly = true)
     public Comment getById(UUID id) {
-        return null;
+        return commentRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", id.toString())));
     }
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.clevertec.news.exception.ExceptionInformation;
+import ru.clevertec.news.model.comment.CommentSearchCriteria;
 import ru.clevertec.news.model.news.NewsMutationModel;
 import ru.clevertec.news.model.news.NewsSearchCriteria;
 import ru.clevertec.news.model.news.NewsViewModel;
@@ -121,4 +122,23 @@ public interface NewsApi {
     @PostMapping("/{id}/archived")
     ResponseEntity<NewsViewModel> archive(
             @NotNull(message = "News id can't be null") @PathVariable UUID id);
+
+    @Operation(
+            summary = "Get news",
+            tags = {"News"},
+            description = "Get news. Returns a list news.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "List of news successfully returned"),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Payload is incorrect: malformed, missing mandatory attributes etc",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "General application error",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
+            })
+    @GetMapping
+    ResponseEntity<Page<NewsViewModel>> getComments(@RequestBody CommentSearchCriteria criteria, Pageable pageRequest);
 }

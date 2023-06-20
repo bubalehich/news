@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.clevertec.news.exception.ExceptionInformation;
+import ru.clevertec.news.model.comment.CommentMutationModel;
 import ru.clevertec.news.model.comment.CommentSearchCriteria;
 import ru.clevertec.news.model.comment.CommentViewModel;
 
@@ -70,7 +71,7 @@ public interface CommentApi {
                             description = "General application error",
                             content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
             })
-    @PostMapping("/search")
+    @GetMapping
     ResponseEntity<Page<CommentViewModel>> getComments(
             @PathVariable UUID newsId, @RequestBody CommentSearchCriteria criteria, Pageable pageRequest);
 

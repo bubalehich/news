@@ -1,11 +1,14 @@
 package ru.clevertec.news.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.news.entity.News;
+import ru.clevertec.news.exception.EntityNotFoundException;
 import ru.clevertec.news.repository.NewsRepository;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,31 +17,55 @@ import java.util.UUID;
 public class NewsService {
     private NewsRepository newsRepository;
 
+    private CommentService commentService;
+
+    @Transactional
     public News create(String text) {
-        return null;
+        var news = new News();
+        news.setArchive(false);
+        news.setTime(LocalDateTime.now());
+        news.setText(text);
+
+        return newsRepository.save(news);
     }
 
-    public News update(String text) {
-        return null;
+
+    @Transactional
+    public News update(UUID id, String text) {
+        var news = newsRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException(String.format("News with id: %s not found.", id.toString())));
+
+        news.setText(text);
+
+        return newsRepository.save(news);
     }
 
-    public boolean delete(UUID id) {
-        return false;
+    @Transactional(readOnly = true)
+    public List<News> getAll(Pageable pageable) {
+        return newsRepository.findAllWithPagination(pageable);
     }
 
-    public List<News> getAll() {
-        return new ArrayList<>();
-    }
-
+    @Transactional(readOnly = true)
     public News getById(UUID id) {
-        return null;
+        return newsRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException(String.format("News with id: %s not found.", id.toString())));
     }
 
+    @Transactional
     public News unarchiveNews(UUID id) {
-        return null;
+        var news = newsRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException(String.format("News with id: %s not found.", id.toString())));
+
+        news.setArchive(false);
+        return newsRepository.save(news);
     }
 
+    @Transactional
     public News archiveNews(UUID id) {
-        return null;
+        var news = newsRepository.findById(id).orElseThrow(()
+                -> new EntityNotFoundException(String.format("News with id: %s not found.", id.toString())));
+
+        news.setArchive(true);
+        return newsRepository.save(news);
     }
 }
