@@ -1,17 +1,16 @@
 package ru.clevertec.news.model.comment;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.util.UUID;
 
 @Data
 public class CommentMutationModel {
-    @NotBlank
+    @NotBlank(message = "Text must not be blank")
+    @Size(min = 3, max = 400)
     private String text;
-    @NotBlank
+
+    @NotBlank(message = "Username must not be blank")
+    @Size(min = 3, max = 50)
     private String username;
-    @NotNull
-    private UUID newsId;
 }

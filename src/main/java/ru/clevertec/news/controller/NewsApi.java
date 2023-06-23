@@ -87,7 +87,7 @@ public interface NewsApi {
             tags = {"News"})
     @PutMapping("/{id}")
     ResponseEntity<NewsViewModel> updateNews(
-            @PathVariable UUID id, @RequestBody NewsMutationModel model);
+            @PathVariable UUID id, @Valid @RequestBody NewsMutationModel model);
 
     @Operation(
             tags = {"News"},

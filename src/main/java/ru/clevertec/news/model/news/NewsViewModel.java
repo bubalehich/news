@@ -1,7 +1,9 @@
 package ru.clevertec.news.model.news;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -12,7 +14,8 @@ public class NewsViewModel {
 
     private String title;
 
-    private String time;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss:SSS")
+    private LocalDateTime time;
 
     private boolean isArchive;
 }
