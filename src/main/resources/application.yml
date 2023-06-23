@@ -5,7 +5,7 @@ spring:
     url: 'jdbc:postgresql://localhost:5432/news_db'
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
   sql:
     init:
       mode: always
