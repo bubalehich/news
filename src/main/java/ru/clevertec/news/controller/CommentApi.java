@@ -5,9 +5,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,11 +20,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.clevertec.news.exception.ExceptionInformation;
 import ru.clevertec.news.model.comment.CommentMutationModel;
-import ru.clevertec.news.model.comment.CommentSearchCriteria;
 import ru.clevertec.news.model.comment.CommentViewModel;
+import ru.clevertec.news.util.sort.CommentSort;
 
 import java.util.UUID;
 
@@ -47,7 +50,7 @@ public interface CommentApi {
             })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<CommentViewModel> createComment(@PathVariable UUID newsId, @RequestBody CommentMutationModel model);
+    ResponseEntity<CommentViewModel> createComment(@PathVariable UUID newsId, @Valid @RequestBody CommentMutationModel model);
 
     @Operation(
             summary = "Get comment",
@@ -73,14 +76,17 @@ public interface CommentApi {
             })
     @GetMapping
     ResponseEntity<Page<CommentViewModel>> getComments(
-            @PathVariable UUID newsId, @RequestBody CommentSearchCriteria criteria, Pageable pageRequest);
+            @PathVariable UUID newsId,
+            @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+            @RequestParam(value = "limit", defaultValue = "20") @Min(1) @Max(100) Integer limit,
+            @RequestParam(value = "sort", required = false, defaultValue = "DATE_ASC") CommentSort sort);
 
     @Operation(
             summary = "Update comment",
             tags = {"Comments"})
     @PutMapping("/{commentId}")
     ResponseEntity<CommentViewModel> updateComment(
-            @PathVariable UUID newsId, @PathVariable UUID commentId, @RequestBody CommentMutationModel model);
+            @PathVariable UUID newsId, @PathVariable UUID commentId, @Valid @RequestBody CommentMutationModel model);
 
     @Operation(
             tags = {"Comments"},
