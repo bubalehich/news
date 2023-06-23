@@ -1,15 +1,16 @@
 package ru.clevertec.news.service;
 
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.news.entity.News;
 import ru.clevertec.news.exception.EntityNotFoundException;
 import ru.clevertec.news.repository.NewsRepository;
+import ru.clevertec.news.util.sort.NewsSort;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -17,32 +18,27 @@ import java.util.UUID;
 public class NewsService {
     private NewsRepository newsRepository;
 
-    private CommentService commentService;
-
     @Transactional
-    public News create(String text) {
+    public News create(String text, String title) {
         var news = new News();
         news.setArchive(false);
         news.setTime(LocalDateTime.now());
         news.setText(text);
+        news.setTitle(title);
 
         return newsRepository.save(news);
     }
 
 
     @Transactional
-    public News update(UUID id, String text) {
+    public News update(UUID id, String text, String title) {
         var news = newsRepository.findById(id).orElseThrow(()
                 -> new EntityNotFoundException(String.format("News with id: %s not found.", id.toString())));
 
         news.setText(text);
+        news.setTitle(title);
 
         return newsRepository.save(news);
-    }
-
-    @Transactional(readOnly = true)
-    public List<News> getAll(Pageable pageable) {
-        return newsRepository.findAllWithPagination(pageable);
     }
 
     @Transactional(readOnly = true)
@@ -67,5 +63,10 @@ public class NewsService {
 
         news.setArchive(true);
         return newsRepository.save(news);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<News> getAllWithPagination(Integer offset, Integer limit, NewsSort sort) {
+        return newsRepository.findAll(PageRequest.of(offset, limit, sort.getSortValue()));
     }
 }

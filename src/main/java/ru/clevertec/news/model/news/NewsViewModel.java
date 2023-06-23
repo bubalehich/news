@@ -9,4 +9,10 @@ public class NewsViewModel {
     private UUID id;
 
     private String text;
+
+    private String title;
+
+    private String time;
+
+    private boolean isArchive;
 }
