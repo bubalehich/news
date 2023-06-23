@@ -26,6 +26,11 @@ repositories {
 dependencies {
 	implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.6.12'
 
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
+
+	implementation("org.mapstruct:mapstruct:${mapstruct_version}")
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${lombok_mapstruct_version}")
 
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
@@ -37,14 +42,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 
-	//region lombok
 	compileOnly 'org.projectlombok:lombok'
-//	annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${lombok_mapstruct_version}")
 	annotationProcessor 'org.projectlombok:lombok'
 
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-	//endregion
 
 //	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //	testImplementation 'org.springframework.boot:spring-boot-testcontainers'
