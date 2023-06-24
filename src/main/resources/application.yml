@@ -6,6 +6,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+    properties:
+      hibernate:
+       search:
+         default:
+           directory_provide: filesystem
+         indexBase: FOLDER_PATH
   sql:
     init:
       mode: always

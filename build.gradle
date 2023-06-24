@@ -22,8 +22,12 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
-	implementation 'org.springframework.boot:spring-boot-starter-validation:'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//	implementation("org.hibernate:hibernate-search-orm:${hibernate_search_version}")
+	implementation("org.hibernate.search:hibernate-search-mapper-orm:${hibernate_search_orm_version}")
+	implementation("org.hibernate.search:hibernate-search-backend-lucene:${hibernate_search_orm_version}")
 
 	implementation ("org.springdoc:springdoc-openapi-ui:${swagger_version}")
 

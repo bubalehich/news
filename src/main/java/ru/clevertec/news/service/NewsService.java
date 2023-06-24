@@ -16,7 +16,7 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class NewsService {
-    private NewsRepository newsRepository;
+    private final NewsRepository newsRepository;
 
     @Transactional
     public News create(String text, String title) {

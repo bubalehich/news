@@ -16,9 +16,9 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class CommentService {
-    private CommentRepository commentRepository;
+    private final CommentRepository commentRepository;
 
-    private NewsService newsService;
+    private final NewsService newsService;
 
     @Transactional
     public Comment create(String text, String username, UUID newsId) {
