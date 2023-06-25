@@ -1,0 +1,42 @@
+version: '3.7'
+services:
+
+  news:
+    container_name: news
+    image: news
+    build:
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/news_db
+    links:
+      - db
+    networks:
+      - backend
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    hostname: postgres
+    restart: on-failure
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=news_db
+    networks:
+      - backend
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge
