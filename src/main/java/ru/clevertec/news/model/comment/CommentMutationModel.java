@@ -2,9 +2,11 @@ package ru.clevertec.news.model.comment;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class CommentMutationModel {
     @NotBlank(message = "Text must not be blank")
     @Size(min = 3, max = 400)

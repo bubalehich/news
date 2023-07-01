@@ -40,8 +40,30 @@ dependencies {
 	implementation ("org.hibernate.search:hibernate-search-mapper-orm-orm6:${hibernate_search_version}")
 	implementation ("org.hibernate.search:hibernate-search-backend-lucene:${hibernate_search_version}")
 	implementation ("org.hibernate.search:hibernate-search-backend-elasticsearch:${hibernate_search_version}")
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.cloud:spring-cloud-starter-contract-stub-runner'
+	testImplementation ("org.testcontainers:postgresql:${test_containers_version}")
+	testImplementation ("com.github.tomakehurst:wiremock-jre8:${wiremock_version}")
+	testImplementation ("org.assertj:assertj-core:${assertj_version}")
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+sourceSets {
+	test {
+		java.srcDirs("src/test/unit/java")
+		resources.srcDir("src/test/unit/resources")
+	}
+
+	integrationTest {
+		compileClasspath += sourceSets.main.output
+		compileClasspath += sourceSets.test.output
+		runtimeClasspath += sourceSets.main.output
+		runtimeClasspath += sourceSets.test.output
+		java.srcDirs("src/test/integration/java")
+		resources.srcDirs("src/test/integration/resources")
+	}
 }
