@@ -26,6 +26,7 @@ public class CommentService {
     private static final String FIELD_TEXT = "text";
     private static final float TEXT_BOOST_FACTOR = 1.1f;
     private static final float USERNAME_BOOST_FACTOR = 2.0f;
+
     private CommentRepository commentRepository;
 
     private NewsService newsService;
@@ -48,7 +49,7 @@ public class CommentService {
     @Transactional
     public Comment update(String text, UUID commentId) {
         var comment = commentRepository.findById(commentId).orElseThrow(()
-                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", commentId.toString())));
+                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", commentId)));
 
         comment.setText(text);
         return commentRepository.save(comment);
@@ -57,7 +58,7 @@ public class CommentService {
     @Transactional
     public boolean delete(UUID commentId) {
         var comment = commentRepository.findById(commentId).orElseThrow(()
-                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", commentId.toString())));
+                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", commentId)));
         commentRepository.delete(comment);
 
         return true;
@@ -66,7 +67,7 @@ public class CommentService {
     @Transactional(readOnly = true)
     public Comment getById(UUID id) {
         return commentRepository.findById(id).orElseThrow(()
-                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", id.toString())));
+                -> new EntityNotFoundException(String.format("Comment with id: %s not found.", id)));
     }
 
     @Transactional(readOnly = true)
