@@ -128,9 +128,9 @@ public interface NewsApi {
             @NotNull(message = "News id can't be null") @PathVariable UUID id);
 
     @Operation(
-            summary = "Get news",
+            summary = "Search news",
             tags = {"News"},
-            description = "get news. Returns a list news.")
+            description = "Search news by title and text")
     @ApiResponses(
             value = {
                     @ApiResponse(responseCode = "200", description = "List of news successfully returned"),

@@ -109,6 +109,22 @@ public interface CommentApi {
             @PathVariable UUID newsId,
             @NotNull(message = "Comment id can't be null") @PathVariable UUID commentId);
 
+    @Operation(
+            summary = "Search comments",
+            tags = {"Comments"},
+            description = "Search comments by author username or text.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "List of comments successfully returned"),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Payload is incorrect: malformed, missing mandatory attributes etc",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "General application error",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
+            })
     @GetMapping("/search")
     Page<CommentViewModel> searchComments(
             @PathVariable UUID newsId,

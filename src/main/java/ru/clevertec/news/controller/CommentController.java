@@ -10,7 +10,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.news.mapper.CommentMapper;
 import ru.clevertec.news.model.comment.CommentMutationModel;
 import ru.clevertec.news.model.comment.CommentViewModel;
-import ru.clevertec.news.model.news.NewsViewModel;
 import ru.clevertec.news.service.CommentService;
 import ru.clevertec.news.util.sort.CommentSort;
 
