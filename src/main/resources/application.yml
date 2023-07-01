@@ -1,26 +1,5 @@
 spring:
-  datasource:
-    username: postgres
-    password: P@55w0rd
-    url: 'jdbc:postgresql://localhost:5432/news_db'
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      ddl-auto: update
-    properties:
-      hibernate:
-        search:
-          backend:
-            analysis:
-              configurer:
-                root: /data/index/default
-  sql:
-    init:
-      mode: always
-
-logging:
-  level:
-    org:
-      hibernate:
-        SQL: DEBUG
-        type: TRACE
+  application:
+    name: news-service
+  profiles:
+    active: prod
