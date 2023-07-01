@@ -22,10 +22,10 @@ import java.util.UUID;
 @Service
 @AllArgsConstructor
 public class NewsService {
-    private static final String NAME_TITLE = "title";
-    private static final String NAME_TEXT = "text";
-    private static final float TEXT_BOOSTING = 1.1f;
-    private static final float TITLE_BOOSTING = 2.0f;
+    private static final String FIELD_TITLE = "title";
+    private static final String FIELD_TEXT = "text";
+    private static final float TEXT_BOOST_FACTOR = 1.1f;
+    private static final float TITLE_BOOST_FACTOR = 2.0f;
 
     private NewsRepository newsRepository;
 
@@ -90,8 +90,8 @@ public class NewsService {
                 .where(news -> news.bool(b -> {
                     b.must(news.matchAll());
                     b.must(news.match()
-                            .field(NAME_TITLE).boost(TITLE_BOOSTING)
-                            .field(NAME_TEXT).boost(TEXT_BOOSTING)
+                            .field(FIELD_TITLE).boost(TITLE_BOOST_FACTOR)
+                            .field(FIELD_TEXT).boost(TEXT_BOOST_FACTOR)
                             .matching(searchValue));
                 }))
                 .sort(SearchSortFactory::score)

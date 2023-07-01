@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.clevertec.news.entity.Comment;
-import ru.clevertec.news.entity.News;
 import ru.clevertec.news.exception.EntityNotFoundException;
 import ru.clevertec.news.repository.CommentRepository;
 import ru.clevertec.news.util.sort.CommentSort;
@@ -86,8 +85,6 @@ public class CommentService {
                             .field(FIELD_TEXT).boost(TEXT_BOOST_FACTOR)
                             .field(FIELD_USERNAME).boost(USERNAME_BOOST_FACTOR)
                             .matching(searchValue));
-
-
                 }))
                 .sort(SearchSortFactory::score)
                 .fetch(offset, limit);

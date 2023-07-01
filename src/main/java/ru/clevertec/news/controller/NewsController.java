@@ -2,18 +2,16 @@ package ru.clevertec.news.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.news.mapper.NewsMapper;
-import ru.clevertec.news.model.SearchCriteria;
 import ru.clevertec.news.model.news.NewsMutationModel;
 import ru.clevertec.news.model.news.NewsViewModel;
 import ru.clevertec.news.service.NewsService;
 import ru.clevertec.news.util.sort.NewsSort;
-import org.springframework.data.domain.PageImpl;
 
 import java.util.UUID;
 
