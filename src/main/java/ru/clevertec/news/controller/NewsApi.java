@@ -77,7 +77,7 @@ public interface NewsApi {
                             content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
             })
     @GetMapping
-    ResponseEntity<Page<NewsViewModel>> getNews(
+    Page<NewsViewModel> getNews(
             @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
             @RequestParam(value = "limit", defaultValue = "20") @Min(1) @Max(100) Integer limit,
             @RequestParam(value = "sort", defaultValue = "ID_DESC") NewsSort sort);
@@ -126,4 +126,26 @@ public interface NewsApi {
     @PostMapping("/{id}/archive")
     ResponseEntity<NewsViewModel> unarchive(
             @NotNull(message = "News id can't be null") @PathVariable UUID id);
+
+    @Operation(
+            summary = "Search news",
+            tags = {"News"},
+            description = "Search news by title and text")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "List of news successfully returned"),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Payload is incorrect: malformed, missing mandatory attributes etc",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "General application error",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
+            })
+    @GetMapping("/search")
+    Page<NewsViewModel> searchNews(
+            @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+            @RequestParam(value = "limit", defaultValue = "20") @Min(1) @Max(100) Integer limit,
+            @RequestParam(value = "searchValue") String searchValue);
 }

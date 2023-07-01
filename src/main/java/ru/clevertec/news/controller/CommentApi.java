@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.clevertec.news.exception.ExceptionInformation;
 import ru.clevertec.news.model.comment.CommentMutationModel;
 import ru.clevertec.news.model.comment.CommentViewModel;
+import ru.clevertec.news.model.news.NewsViewModel;
 import ru.clevertec.news.util.sort.CommentSort;
 
 import java.util.UUID;
@@ -107,4 +108,27 @@ public interface CommentApi {
     ResponseEntity<CommentViewModel> deleteComment(
             @PathVariable UUID newsId,
             @NotNull(message = "Comment id can't be null") @PathVariable UUID commentId);
+
+    @Operation(
+            summary = "Search comments",
+            tags = {"Comments"},
+            description = "Search comments by author username or text.")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(responseCode = "200", description = "List of comments successfully returned"),
+                    @ApiResponse(
+                            responseCode = "400",
+                            description = "Payload is incorrect: malformed, missing mandatory attributes etc",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class))),
+                    @ApiResponse(
+                            responseCode = "500",
+                            description = "General application error",
+                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
+            })
+    @GetMapping("/search")
+    Page<CommentViewModel> searchComments(
+            @PathVariable UUID newsId,
+            @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
+            @RequestParam(value = "limit", defaultValue = "20") @Min(1) @Max(100) Integer limit,
+            @RequestParam(value = "searchValue") String searchValue);
 }
