@@ -13,6 +13,9 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import java.util.UUID;
 @Setter
 @Table
 @Entity
+@Indexed
 public class News {
     @Id
     @GeneratedValue
@@ -32,12 +36,15 @@ public class News {
     private UUID id;
     private LocalDateTime time;
 
+    @FullTextField
     @Column(nullable = false, length = 50)
     private String title;
 
+    @FullTextField
     @Column(nullable = false, length = 1000)
     private String text;
 
+    @IndexedEmbedded
     @OneToMany(mappedBy = "news")
     private List<Comment> comments;
 

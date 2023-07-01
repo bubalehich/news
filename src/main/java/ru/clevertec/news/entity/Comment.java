@@ -13,6 +13,8 @@ import lombok.Setter;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -23,6 +25,7 @@ import java.util.UUID;
 @Setter
 @Table
 @Entity
+@Indexed
 public class Comment {
     @Id
     @GeneratedValue
@@ -31,9 +34,11 @@ public class Comment {
 
     private LocalDateTime time;
 
+    @FullTextField
     @Column(nullable = false, length = 1000)
     private String text;
 
+    @FullTextField
     @Column(nullable = false)
     private String username;
 

@@ -2,12 +2,15 @@ package ru.clevertec.news.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.clevertec.news.mapper.CommentMapper;
 import ru.clevertec.news.model.comment.CommentMutationModel;
 import ru.clevertec.news.model.comment.CommentViewModel;
+import ru.clevertec.news.model.news.NewsViewModel;
 import ru.clevertec.news.service.CommentService;
 import ru.clevertec.news.util.sort.CommentSort;
 
@@ -61,5 +64,13 @@ public class CommentController implements CommentApi {
         commentService.delete(commentId);
 
         return ResponseEntity.noContent().build();
+    }
+
+    @Override
+    public Page<CommentViewModel> searchComments(UUID newsId, Integer offset, Integer limit, String searchValue) {
+        var comments = commentService.search(searchValue, offset, limit);
+        var viewModels = comments.stream().map(commentMapper::commentToCommentViewModel).toList();
+
+        return new PageImpl<>(viewModels, PageRequest.of(limit, offset), viewModels.size());
     }
 }

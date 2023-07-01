@@ -36,6 +36,10 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
+
+	implementation ("org.hibernate.search:hibernate-search-mapper-orm-orm6:${hibernate_search_version}")
+	implementation ("org.hibernate.search:hibernate-search-backend-lucene:${hibernate_search_version}")
+	implementation ("org.hibernate.search:hibernate-search-backend-elasticsearch:${hibernate_search_version}")
 }
 
 tasks.named('test') {

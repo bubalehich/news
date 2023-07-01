@@ -182,6 +182,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "SEARCH",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/news/search?title=qwe&username=asd",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"news",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "qwe"
+								},
+								{
+									"key": "username",
+									"value": "asd"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -325,8 +356,57 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "SEARCH",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8080/api/v1/comments/search?title=pupa&username=cat",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"search"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "pupa"
+								},
+								{
+									"key": "username",
+									"value": "cat"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
+		},
+		{
+			"name": "SWAGGER CHECK",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
