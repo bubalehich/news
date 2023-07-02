@@ -5,17 +5,16 @@ spring:
     url: 'jdbc:postgresql://localhost:5432/news_db'
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
         search:
-          thread_pool:
-          size: 4
           backend:
             analysis:
               configurer: ru.clevertec.news.search.LuceneAnalysisConfig
             directory:
-                root: /data/index/default
+              root: /data/index/default
   sql:
     init:
       mode: always
@@ -28,4 +27,4 @@ logging:
         type: TRACE
 
 data-fixtures:
-  enabled: true
+  enabled: false

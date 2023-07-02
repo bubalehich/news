@@ -15,19 +15,18 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
-import org.hibernate.search.mapper.pojo.mapping.definition.annotation.IndexedEmbedded;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-@Table
-@Entity
+@Table(name = "news")
 @Indexed
 public class News {
     @Id
@@ -36,15 +35,17 @@ public class News {
     private UUID id;
     private LocalDateTime time;
 
-    @FullTextField
+    @FullTextField(analyzer = "custom")
     @Column(nullable = false, length = 50)
     private String title;
 
-    @FullTextField
+    @FullTextField(analyzer = "custom")
     @Column(nullable = false, length = 1000)
     private String text;
 
-    @IndexedEmbedded
+    @Column(nullable = false, length = 50)
+    private String email;
+
     @OneToMany(mappedBy = "news")
     private List<Comment> comments;
 

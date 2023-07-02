@@ -39,7 +39,6 @@ dependencies {
 
     implementation("org.hibernate.search:hibernate-search-mapper-orm-orm6:${hibernate_search_version}")
     implementation("org.hibernate.search:hibernate-search-backend-lucene:${hibernate_search_version}")
-//    implementation("org.hibernate.search:hibernate-search-backend-elasticsearch:${hibernate_search_version}")
 
     implementation("ro.polak:spring-boot-data-fixtures:${data_fixtures_version}")
     implementation("com.github.javafaker:javafaker:${faker_version}")
