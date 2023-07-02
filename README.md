@@ -6,7 +6,7 @@
  ## Build
  - `gradle clean build`
  - `docker-compose up -d`
- - 
+
  ## Fake data
  Can be loaded with DataFixtures.
  `data-fixtures.enabled : true` in configurations.
