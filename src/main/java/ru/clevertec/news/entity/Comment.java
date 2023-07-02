@@ -23,9 +23,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table
 @Entity
 @Indexed
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue
@@ -34,13 +34,16 @@ public class Comment {
 
     private LocalDateTime time;
 
-    @FullTextField
+    @FullTextField(analyzer = "custom")
     @Column(nullable = false, length = 1000)
     private String text;
 
-    @FullTextField
+    @FullTextField(analyzer = "custom")
     @Column(nullable = false)
     private String username;
+
+    @Column(nullable = false)
+    private String email;
 
     @ManyToOne
     private News news;

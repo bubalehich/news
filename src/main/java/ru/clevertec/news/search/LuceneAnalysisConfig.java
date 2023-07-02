@@ -10,17 +10,17 @@ import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurationC
 import org.hibernate.search.backend.lucene.analysis.LuceneAnalysisConfigurer;
 
 public class LuceneAnalysisConfig implements LuceneAnalysisConfigurer {
-    private static final String ENGLISH = "English";
+    private static final String CUSTOM = "Custom";
 
     @Override
     public void configure(@NotNull LuceneAnalysisConfigurationContext context) {
-        context.analyzer(ENGLISH)
+        context.analyzer(CUSTOM)
                 .custom()
                 .tokenizer(StandardTokenizerFactory.class)
                 .charFilter(HTMLStripCharFilterFactory.class)
                 .tokenFilter(LowerCaseFilterFactory.class)
                 .tokenFilter(SnowballPorterFilterFactory.class)
-                .param("language", ENGLISH)
+                .param("language", "English")
                 .tokenFilter(ASCIIFoldingFilterFactory.class);
 
         context.normalizer("lowercase")

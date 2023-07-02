@@ -61,10 +61,12 @@ public class NewsController implements NewsApi {
 
     @Override
     public Page<NewsViewModel> searchNews(Integer offset, Integer limit, String searchValue) {
-        var news = newsService.search(searchValue, offset, limit);
-        var viewModels = news.stream().map(newsMapper::mapToViewModel).toList();
+//        var news = newsService.search(searchValue, offset, limit);
+//        var viewModels = news.stream().map(newsMapper::mapToViewModel).toList();
+//
+//        return new PageImpl<>(viewModels, PageRequest.of(limit, offset), viewModels.size());
 
-        return new PageImpl<>(viewModels, PageRequest.of(limit, offset), viewModels.size());
+        return null;
     }
 
     @Override
