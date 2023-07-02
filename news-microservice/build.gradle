@@ -44,6 +44,14 @@ dependencies {
     implementation("com.github.javafaker:javafaker:${faker_version}")
 
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${spring_cloud_version}"
+    }
 }
 
 tasks.named('test') {

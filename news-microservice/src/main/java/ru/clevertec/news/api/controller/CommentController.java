@@ -1,12 +1,14 @@
-package ru.clevertec.news.controller;
+package ru.clevertec.news.api.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.clevertec.news.api.CommentApi;
 import ru.clevertec.news.mapper.CommentMapper;
 import ru.clevertec.news.model.comment.CommentMutationModel;
 import ru.clevertec.news.model.comment.CommentViewModel;
@@ -16,7 +18,7 @@ import ru.clevertec.news.util.sort.CommentSort;
 import java.util.UUID;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CommentController implements CommentApi {
     private final CommentService commentService;
     private final CommentMapper commentMapper;

@@ -5,6 +5,7 @@ create table news
     id         uuid          not null
         primary key,
     title      varchar(50)   not null,
+    email      varchar(50)   not null,
     text       varchar(1000) not null
 );
 
