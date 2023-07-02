@@ -3,7 +3,7 @@ package ru.clevertec.auth.model;
 import lombok.Data;
 
 @Data
-public class TokenValidationResponse {
+public class TokenValidationModel {
     private boolean isValid;
 
     private String email;

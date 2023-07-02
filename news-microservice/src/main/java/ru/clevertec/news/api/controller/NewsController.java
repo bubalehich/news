@@ -1,12 +1,14 @@
-package ru.clevertec.news.controller;
+package ru.clevertec.news.api.controller;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import ru.clevertec.news.api.NewsApi;
 import ru.clevertec.news.mapper.NewsMapper;
 import ru.clevertec.news.model.news.NewsMutationModel;
 import ru.clevertec.news.model.news.NewsViewModel;
@@ -16,7 +18,7 @@ import ru.clevertec.news.util.sort.NewsSort;
 import java.util.UUID;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class NewsController implements NewsApi {
     private final NewsService newsService;
 

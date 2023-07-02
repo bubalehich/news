@@ -5,7 +5,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import ru.clevertec.auth.model.TokenDto;
-import ru.clevertec.auth.model.TokenValidationResponse;
+import ru.clevertec.auth.model.TokenModel;
+import ru.clevertec.auth.model.TokenValidationModel;
 import ru.clevertec.auth.service.UserService;
 
 import java.security.Key;
@@ -49,7 +48,7 @@ public class SecurityService {
         return authentication.isAuthenticated();
     }
 
-    public TokenValidationResponse validate(String token) {
+    public TokenValidationModel validate(String token) {
         String jwt = token.substring(7);
         String email = extractUsername(jwt);
         String roles = extractClaim(jwt, claims -> claims.get("roles")).toString();
@@ -57,7 +56,7 @@ public class SecurityService {
                 .map(s -> s.substring(s.indexOf("=") + 1, s.length() - 2))
                 .findFirst()
                 .orElse("");
-        var tokenResponse = new TokenValidationResponse();
+        var tokenResponse = new TokenValidationModel();
         tokenResponse.setEmail(email);
         tokenResponse.setRole(role);
         tokenResponse.setValid(true);
@@ -66,7 +65,7 @@ public class SecurityService {
     }
 
 
-    public TokenDto generateToken(UserDetails userDetails) {
+    public TokenModel generateToken(UserDetails userDetails) {
         var issuedAt = new Date(System.currentTimeMillis());
         var expiredAt = new Date(System.currentTimeMillis() + expired);
 
@@ -78,7 +77,7 @@ public class SecurityService {
                 .signWith(getSigningKey(), ALGORITHM)
                 .compact();
 
-        return new TokenDto(expiredAt, token, TYPE);
+        return new TokenModel(expiredAt, token, TYPE);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

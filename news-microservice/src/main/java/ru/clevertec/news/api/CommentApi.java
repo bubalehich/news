@@ -1,11 +1,10 @@
-package ru.clevertec.news.controller;
+package ru.clevertec.news.api;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -24,23 +23,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import ru.clevertec.news.exception.ExceptionInformation;
-import ru.clevertec.news.model.news.NewsMutationModel;
-import ru.clevertec.news.model.news.NewsViewModel;
-import ru.clevertec.news.util.sort.NewsSort;
+import ru.clevertec.news.model.comment.CommentMutationModel;
+import ru.clevertec.news.model.comment.CommentViewModel;
+import ru.clevertec.news.util.sort.CommentSort;
 
 import java.util.UUID;
 
-@RequestMapping("api/v1/news")
+@RequestMapping("api/v1/news/{newsId}/comments")
 @Validated
-@Tag(name = "News API", description = "News api interface")
-public interface NewsApi {
+public interface CommentApi {
     @Operation(
-            summary = "Create new news",
-            tags = {"News"},
-            description = "News creation. Returns the location of a new resource in headers.")
+            summary = "Create new comment",
+            tags = {"Comments"},
+            description = "Comment creation. Returns the location of a new resource in headers.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "201", description = "News successfully created"),
+                    @ApiResponse(responseCode = "201", description = "Comment successfully created"),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Payload is incorrect: malformed, missing mandatory attributes etc",
@@ -52,21 +50,21 @@ public interface NewsApi {
             })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<NewsViewModel> createNews(@Valid @RequestBody NewsMutationModel model);
+    ResponseEntity<CommentViewModel> createComment(@PathVariable UUID newsId, @Valid @RequestBody CommentMutationModel model);
 
     @Operation(
-            summary = "Get news by uuid",
-            tags = {"News"})
+            summary = "Get comment",
+            tags = {"Comments"})
     @GetMapping("/{id}")
-    ResponseEntity<NewsViewModel> getNews(@PathVariable UUID id);
+    ResponseEntity<CommentViewModel> getComment(@PathVariable UUID newsId, @PathVariable UUID id);
 
     @Operation(
-            summary = "Get news",
-            tags = {"News"},
-            description = "get news. Returns a list news.")
+            summary = "Get comments",
+            tags = {"Comments"},
+            description = "Get comments. Returns a list comments.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "List of news successfully returned"),
+                    @ApiResponse(responseCode = "200", description = "List of comments successfully returned"),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Payload is incorrect: malformed, missing mandatory attributes etc",
@@ -77,24 +75,25 @@ public interface NewsApi {
                             content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
             })
     @GetMapping
-    Page<NewsViewModel> getNews(
+    ResponseEntity<Page<CommentViewModel>> getComments(
+            @PathVariable UUID newsId,
             @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
             @RequestParam(value = "limit", defaultValue = "20") @Min(1) @Max(100) Integer limit,
-            @RequestParam(value = "sort", defaultValue = "ID_DESC") NewsSort sort);
+            @RequestParam(value = "sort", required = false, defaultValue = "DATE_ASC") CommentSort sort);
 
     @Operation(
-            summary = "Update news",
-            tags = {"News"})
-    @PutMapping("/{id}")
-    ResponseEntity<NewsViewModel> updateNews(
-            @PathVariable UUID id, @Valid @RequestBody NewsMutationModel model);
+            summary = "Update comment",
+            tags = {"Comments"})
+    @PutMapping("/{commentId}")
+    ResponseEntity<CommentViewModel> updateComment(
+            @PathVariable UUID newsId, @PathVariable UUID commentId, @Valid @RequestBody CommentMutationModel model);
 
     @Operation(
-            tags = {"News"},
-            description = "Unarchives news by id")
+            tags = {"Comments"},
+            description = "Delete comment by id")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "News is unarchived"),
+                    @ApiResponse(responseCode = "204", description = "Comment deleted"),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Unable to parse the request: the payload is not valid",
@@ -104,36 +103,18 @@ public interface NewsApi {
                             description = "General application error",
                             content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
             })
-    @DeleteMapping("/{id}/archive")
-    ResponseEntity<NewsViewModel> archive(
-            @NotNull(message = "Patient id can't be null") @PathVariable UUID id);
+    @DeleteMapping("/{commentId}")
+    ResponseEntity<CommentViewModel> deleteComment(
+            @PathVariable UUID newsId,
+            @NotNull(message = "Comment id can't be null") @PathVariable UUID commentId);
 
     @Operation(
-            tags = {"News"},
-            description = "Archives news by id")
+            summary = "Search comments",
+            tags = {"Comments"},
+            description = "Search comments by author username or text.")
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "204", description = "News is archived"),
-                    @ApiResponse(
-                            responseCode = "400",
-                            description = "Unable to parse the request: the payload is not valid",
-                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class))),
-                    @ApiResponse(
-                            responseCode = "500",
-                            description = "General application error",
-                            content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
-            })
-    @PostMapping("/{id}/archive")
-    ResponseEntity<NewsViewModel> unarchive(
-            @NotNull(message = "News id can't be null") @PathVariable UUID id);
-
-    @Operation(
-            summary = "Search news",
-            tags = {"News"},
-            description = "Search news by title and text")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "List of news successfully returned"),
+                    @ApiResponse(responseCode = "200", description = "List of comments successfully returned"),
                     @ApiResponse(
                             responseCode = "400",
                             description = "Payload is incorrect: malformed, missing mandatory attributes etc",
@@ -144,7 +125,8 @@ public interface NewsApi {
                             content = @Content(schema = @Schema(implementation = ExceptionInformation.class)))
             })
     @GetMapping("/search")
-    Page<NewsViewModel> searchNews(
+    Page<CommentViewModel> searchComments(
+            @PathVariable UUID newsId,
             @RequestParam(value = "offset", defaultValue = "0") @Min(0) Integer offset,
             @RequestParam(value = "limit", defaultValue = "20") @Min(1) @Max(100) Integer limit,
             @RequestParam(value = "searchValue") String searchValue);
