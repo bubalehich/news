@@ -1,8 +1,8 @@
 spring:
   datasource:
-    username: postgres
-    password: postgres
-    url: 'jdbc:postgresql://localhost:5432/news_db'
+    username:
+    password:
+    url:
   jpa:
     hibernate:
       ddl-auto: update
@@ -10,14 +10,9 @@ spring:
     init:
       mode: always
       continue-on-error: true
-  profiles:
-    active: dev
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
         type: TRACE
-
-data-fixtures:
-  enabled: true

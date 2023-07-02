@@ -6,6 +6,9 @@ import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -31,6 +34,7 @@ public class NewsService {
 
     private EntityManager entityManager;
 
+    @CachePut(value = "news", key = "#result.id()")
     @Transactional
     public News create(String text, String title) {
         var news = new News();
@@ -42,6 +46,7 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
+    @CachePut(value = "news", key = "#result.id()")
     @Transactional
     public News update(UUID id, String text, String title) {
         var news = newsRepository.findById(id).orElseThrow(()
@@ -53,6 +58,7 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
+    @Cacheable(value = "news")
     @Transactional(readOnly = true)
     public News getById(UUID id) {
         return newsRepository.findById(id).orElseThrow(()
@@ -68,6 +74,7 @@ public class NewsService {
         return newsRepository.save(news);
     }
 
+    @CacheEvict(value = "news", key = "#id")
     @Transactional
     public News archiveNews(UUID id) {
         var news = newsRepository.findById(id).orElseThrow(()

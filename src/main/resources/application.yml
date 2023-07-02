@@ -1,5 +1,3 @@
 spring:
-  application:
-    name: news-service
   profiles:
-    active: prod
+    active: dev
