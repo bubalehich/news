@@ -5,15 +5,35 @@ services:
     container_name: news
     image: news
     build:
-      dockerfile: docker/Dockerfile
+      dockerfile: news-microservice/docker/Dockerfile
     ports:
       - "8080:8080"
     depends_on:
       - db
+      - redis
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/news_db
     links:
       - db
+      - redis
+    networks:
+      - backend
+
+  users:
+    container_name: users
+    image: users
+    build:
+      dockerfile: user-microservice/docker/Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/users_db
+    links:
+      - db
+      - redis
     networks:
       - backend
 
@@ -30,6 +50,14 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=news_db
+    networks:
+      - backend
+
+  redis:
+    container_name: redis
+    image: "redis:7.2-rc-alpine"
+    ports:
+      - "6379:6379"
     networks:
       - backend
 

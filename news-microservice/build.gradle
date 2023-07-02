@@ -1,0 +1,51 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'ru.clevertec'
+version = '1.1.0'
+sourceCompatibility = targetCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+    implementation 'org.springframework.boot:spring-boot-starter-validation:'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${swagger_ui_version}"
+
+    implementation("org.mapstruct:mapstruct:${mapstruct_version}")
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstruct_version}"
+    annotationProcessor("org.projectlombok:lombok-mapstruct-binding:${lombok_mapstruct_version}")
+
+    runtimeOnly 'org.postgresql:postgresql'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
+    implementation("org.hibernate.search:hibernate-search-mapper-orm-orm6:${hibernate_search_version}")
+    implementation("org.hibernate.search:hibernate-search-backend-lucene:${hibernate_search_version}")
+
+    implementation("ro.polak:spring-boot-data-fixtures:${data_fixtures_version}")
+    implementation("com.github.javafaker:javafaker:${faker_version}")
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
