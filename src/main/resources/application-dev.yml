@@ -1,17 +1,25 @@
 spring:
   datasource:
     username: postgres
-    password: postgres
+    password: P@55w0rd
     url: 'jdbc:postgresql://localhost:5432/news_db'
   jpa:
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        search:
+          thread_pool:
+          size: 4
+          backend:
+            analysis:
+              configurer: ru.clevertec.news.search.LuceneAnalysisConfig
+            directory:
+                root: /data/index/default
   sql:
     init:
       mode: always
       continue-on-error: true
-  profiles:
-    active: dev
 logging:
   level:
     org:

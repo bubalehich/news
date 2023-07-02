@@ -6,6 +6,8 @@ import org.hibernate.search.engine.search.query.SearchResult;
 import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
 import org.hibernate.search.mapper.orm.Search;
 import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,7 @@ public class CommentService {
     private EntityManager entityManager;
 
     @Transactional
+    @CachePut(value = "comment", key = "#result.id()")
     public Comment create(String text, String username, UUID newsId) {
         var news = newsService.getById(newsId);
 
@@ -46,6 +49,7 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
+    @CachePut(value = "comment", key = "#result.id()")
     @Transactional
     public Comment update(String text, UUID commentId) {
         var comment = commentRepository.findById(commentId).orElseThrow(()
@@ -65,6 +69,7 @@ public class CommentService {
     }
 
     @Transactional(readOnly = true)
+    @Cacheable(value = "comment")
     public Comment getById(UUID id) {
         return commentRepository.findById(id).orElseThrow(()
                 -> new EntityNotFoundException(String.format("Comment with id: %s not found.", id)));
