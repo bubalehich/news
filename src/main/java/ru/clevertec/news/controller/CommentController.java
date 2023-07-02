@@ -67,11 +67,9 @@ public class CommentController implements CommentApi {
 
     @Override
     public Page<CommentViewModel> searchComments(UUID newsId, Integer offset, Integer limit, String searchValue) {
-//        var comments = commentService.search(searchValue, offset, limit);
-//        var viewModels = comments.stream().map(commentMapper::commentToCommentViewModel).toList();
-//
-//        return new PageImpl<>(viewModels, PageRequest.of(limit, offset), viewModels.size());
+        var comments = commentService.search(searchValue, offset, limit);
+        var viewModels = comments.stream().map(commentMapper::commentToCommentViewModel).toList();
 
-        return null;
+        return new PageImpl<>(viewModels, PageRequest.of(limit, offset), viewModels.size());
     }
 }
