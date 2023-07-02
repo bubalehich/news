@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    username:
+    password:
+    url:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  sql:
+    init:
+      mode: always
+      continue-on-error: true
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type: TRACE
