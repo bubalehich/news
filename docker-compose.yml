@@ -1,0 +1,70 @@
+version: '3.7'
+services:
+
+  news:
+    container_name: news
+    image: news
+    build:
+      dockerfile: news-microservice/docker/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/news_db
+    links:
+      - db
+      - redis
+    networks:
+      - backend
+
+  users:
+    container_name: users
+    image: users
+    build:
+      dockerfile: user-microservice/docker/Dockerfile
+    ports:
+      - "8082:8082"
+    depends_on:
+      - db
+      - redis
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/users_db
+    links:
+      - db
+      - redis
+    networks:
+      - backend
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    hostname: postgres
+    restart: on-failure
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=news_db
+    networks:
+      - backend
+
+  redis:
+    container_name: redis
+    image: "redis:7.2-rc-alpine"
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+
+volumes:
+  db-data:
+    driver: local
+
+networks:
+  backend:
+    driver: bridge

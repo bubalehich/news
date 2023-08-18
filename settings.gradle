@@ -1,1 +1,3 @@
 rootProject.name = 'news'
+include 'news-microservice',
+        'user-microservice'
